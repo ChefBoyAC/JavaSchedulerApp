@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- now we add dialog -->
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation = "vertical"
+    android:gravity = "center"
+    android:layout_margin = "15dp"
+    >
+    <LinearLayout
+        android:orientation = "vertical"
+        android:paddingBottom = "15dp"
+        android:paddingLeft = "8dp"
+        android:paddingRight = "8dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+        <TextView
+            android:text = "Add the Course Information"
+            android:textStyle = "bold"
+            android:textSize = "19sp"
+            android:textColor = "@color/white"
+            android:background = "@color/purple_500"
+            android:padding = "10dp"
+            android:layout_gravity = "center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"></TextView>
+        <EditText
+            android:hint="Course Name"
+            android:id="@+id/courseName"
+            android:inputType="textLongMessage|textPersonName"
+            android:textColor="@color/purple_500"
+            android:textSize = "18sp"
+            android:minHeight="48dp"
+            android:textStyle = "bold"
+            android:layout_margin = "15dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"></EditText>
+        <!-- inputType may have to be rearranged one may or may not have to be rearranged but I will ask for recommendation -->
+        <EditText
+            android:hint="Date/Time of Class"
+            android:id="@+id/dateAndTimeOfClass"
+            android:inputType="text|time|datetime|textMultiLine"
+            android:textColor="@color/purple_500"
+            android:textSize = "18sp"
+            android:textStyle = "bold"
+            android:minHeight="48dp"
+            android:layout_margin = "15dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"></EditText>
+        <EditText
+            android:hint="Name of Instructor"
+            android:id="@+id/instructor"
+            android:inputType = "textPersonName"
+            android:textColor="@color/purple_500"
+            android:textSize = "18sp"
+            android:textStyle = "bold"
+            android:layout_margin = "15dp"
+            android:minHeight="48dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"></EditText>
+
+    </LinearLayout>
+
+</LinearLayout>
