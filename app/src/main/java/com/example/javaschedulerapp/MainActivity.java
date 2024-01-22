@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -61,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
         EditText courseName = v.findViewById(R.id.courseName);
         EditText dateAndTimeOfClass = v.findViewById(R.id.dateAndTimeOfClass);
         EditText instructor = v.findViewById(R.id.instructor);
+        EditText location = v.findViewById(R.id.location);
 
         AlertDialog.Builder addDialog = new AlertDialog.Builder(this);
 
@@ -70,12 +70,13 @@ public class MainActivity extends AppCompatActivity {
             String courses = courseName.getText().toString();
             String dateAndTime = dateAndTimeOfClass.getText().toString();
             String instructors = instructor.getText().toString();
+            String locations = location.getText().toString();
 
             userList.add(new UserData(
                     "Course: " + courses,
                     "Date and Time of Class: " + dateAndTime,
-                    "Instructor: " + instructors
-            ));
+                    "Instructor: " + instructors,
+                    "Location: " + locations));
 
             userAdapter.notifyDataSetChanged();
             //Toast.makeText(MainActivity.this, "Adding User Information Success", Toast.LENGTH_SHORT).show();

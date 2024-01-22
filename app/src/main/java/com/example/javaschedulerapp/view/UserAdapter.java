@@ -29,11 +29,14 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
         TextView userSchedule;
         TextView userInstructor;
 
+        TextView userLocation;
+
         public UserViewHolder(View v) {
             super(v);
             name = v.findViewById(R.id.mTitle);
             userSchedule = v.findViewById(R.id.subTitle);
             userInstructor = v.findViewById(R.id.anotherSubTitle);
+            userLocation = v.findViewById(R.id.anotherAnotherSubTitle);
         }
     }
 
@@ -50,6 +53,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
         holder.name.setText(newList.getUsername());
         holder.userSchedule.setText(newList.getUserSchedule());
         holder.userInstructor.setText(newList.getUserInstructor());
+        holder.userLocation.setText(newList.getUserLocation());
     }
 
     @Override

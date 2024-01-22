@@ -8,10 +8,13 @@ public class UserData {
     private final String userSchedule;
     private final String userInstructor;
 
-    public UserData(String username, String userSchedule, String userInstructor) {
+    private final String userLocation;
+
+    public UserData(String username, String userSchedule, String userInstructor, String userLocation) {
         this.username = username;
         this.userSchedule = userSchedule;
         this.userInstructor = userInstructor;
+        this.userLocation = userLocation;
     }
 
     public String getUsername() {
@@ -24,5 +27,9 @@ public class UserData {
 
     public String getUserInstructor() {
         return userInstructor;
+    }
+
+    public String getUserLocation() {
+        return userLocation;
     }
 }
