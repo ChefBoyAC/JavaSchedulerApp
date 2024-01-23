@@ -92,6 +92,8 @@ public class MainActivity extends AppCompatActivity {
         addDialog.show();
     }
 
+
+
     /***
      * Now we code the whole CardView portal
      * 1. Create the data class -> userData
