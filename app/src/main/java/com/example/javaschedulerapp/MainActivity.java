@@ -1,8 +1,11 @@
 package com.example.javaschedulerapp;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 
 import androidx.appcompat.app.AlertDialog;
@@ -11,8 +14,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 
-import com.example.javaschedulerapp.model.UserData;
-import com.example.javaschedulerapp.view.UserAdapter;
+import com.example.javaschedulerapp.model.ClassData;
+import com.example.javaschedulerapp.view.ClassAdapter;
+import com.example.javaschedulerapp.view.TaskAdapter;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
@@ -21,27 +25,40 @@ public class MainActivity extends AppCompatActivity {
 
     private FloatingActionButton addsBtn;
     private RecyclerView recy;
-    private ArrayList<UserData> userList;
-    private UserAdapter userAdapter;
+    private ArrayList<ClassData> classList;
+    private ClassAdapter classAdapter;
 
+    private static final String TAG = "MainActivity";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Log.d(TAG, "onCreate: Starting.");
+
+        Button btnNavToSecond = (Button) findViewById(R.id.toSecondScreen);
+
+        btnNavToSecond.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "OnClick: Clicked btnNavToSecond");
+                Intent intent = new Intent(MainActivity.this, SecondActivity.class);
+                startActivity(intent);
+            }
+        });
 
         // Set List
-        userList = new ArrayList<>();
+        classList = new ArrayList<>();
 
         // Set find Id
-        addsBtn = findViewById(R.id.addingBtn);
+        addsBtn = findViewById(R.id.addingClassBtn);
         recy = findViewById(R.id.mRecycler);
 
         // Set Adapter
-        userAdapter = new UserAdapter(this, userList);
+        classAdapter = new ClassAdapter(this, classList);
 
         // Set RecyclerView Adapter
         recy.setLayoutManager(new LinearLayoutManager(this));
-        recy.setAdapter(userAdapter);
+        recy.setAdapter(classAdapter);
 
         // Set Dialog
         addsBtn.setOnClickListener(new View.OnClickListener() {
@@ -54,13 +71,12 @@ public class MainActivity extends AppCompatActivity {
 
     private void addInfo() {
         LayoutInflater inflater = LayoutInflater.from(this);
-        View v = inflater.inflate(R.layout.add_item, null);
+        View v = inflater.inflate(R.layout.add_class_item, null);
 
         // Set view
         EditText courseName = v.findViewById(R.id.courseName);
         EditText dateAndTimeOfClass = v.findViewById(R.id.dateAndTimeOfClass);
         EditText instructor = v.findViewById(R.id.instructor);
-        EditText location = v.findViewById(R.id.location);
 
         AlertDialog.Builder addDialog = new AlertDialog.Builder(this);
 
@@ -70,15 +86,14 @@ public class MainActivity extends AppCompatActivity {
             String courses = courseName.getText().toString();
             String dateAndTime = dateAndTimeOfClass.getText().toString();
             String instructors = instructor.getText().toString();
-            String locations = location.getText().toString();
 
-            userList.add(new UserData(
+            classList.add(new ClassData(
                     "Course: " + courses,
                     "Date and Time of Class: " + dateAndTime,
-                    "Instructor: " + instructors,
-                    "Location: " + locations));
+                    "Instructor: " + instructors
+            ));
 
-            userAdapter.notifyDataSetChanged();
+            classAdapter.notifyDataSetChanged();
             //Toast.makeText(MainActivity.this, "Adding User Information Success", Toast.LENGTH_SHORT).show();
             dialog.dismiss();
         });
@@ -91,12 +106,4 @@ public class MainActivity extends AppCompatActivity {
         addDialog.create();
         addDialog.show();
     }
-
-
-
-    /***
-     * Now we code the whole CardView portal
-     * 1. Create the data class -> userData
-     * 2. Add user and button dialog information into the activity_main.xml
-     */
 }

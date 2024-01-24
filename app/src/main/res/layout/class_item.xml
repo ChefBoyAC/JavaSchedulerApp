@@ -19,43 +19,35 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="4dp"
-            android:id ="@+id/listLayout"
             android:orientation="vertical"
             android:padding="10dp">
 
             <TextView
-                android:id="@+id/mTitle"
+                android:id="@+id/ClassTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Title"
                 android:textColor="@color/black"
                 android:textSize="19sp"
-                android:textStyle="bold"></TextView>
+                android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/subTitle"
+                android:id="@+id/TimeTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Date/Time of Class"
                 android:textColor="@color/black"
                 android:textSize="19sp"
-                android:textStyle="bold"></TextView>
+                android:textStyle="bold" />
+
             <TextView
-                android:id="@+id/anotherSubTitle"
+                android:id="@+id/InstructorTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Name of Instructor"
                 android:textColor="@color/black"
                 android:textSize="19sp"
-                android:textStyle="bold"></TextView>
-            <TextView
-                android:id="@+id/anotherAnotherSubTitle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Location and Room Number"
-                android:textColor="@color/black"
-                android:textSize="19sp"
-                android:textStyle="bold"></TextView>
+                android:textStyle="bold" />
 
         </LinearLayout>
             <ImageButton
