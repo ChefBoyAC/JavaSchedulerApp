@@ -104,7 +104,7 @@ public class MainActivity extends AppCompatActivity {
                     "Course: " + courses,
                     "Date and Time of Class: " + dateAndTime,
                     "Instructor: " + instructors,
-                    "Location/RoomNumber: " + locationsAndRooms
+                    "Location/Room Number: " + locationsAndRooms
 
 
 
