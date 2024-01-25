@@ -28,11 +28,14 @@ public class ClassAdapter extends RecyclerView.Adapter<ClassAdapter.ClassViewHol
         TextView classSchedule;
         TextView classInstructor;
 
+        TextView classLocationAndRoomNumber;
+
         public ClassViewHolder(View v) {
             super(v);
             className = v.findViewById(R.id.ClassTitle);
             classSchedule = v.findViewById(R.id.TimeTitle);
             classInstructor = v.findViewById(R.id.InstructorTitle);
+            classLocationAndRoomNumber= v.findViewById(R.id.LocationAndRoomNumberTitle);
 
         }
     }
@@ -50,6 +53,7 @@ public class ClassAdapter extends RecyclerView.Adapter<ClassAdapter.ClassViewHol
         holder.className.setText(newList.getClassName());
         holder.classSchedule.setText(newList.getClassSchedule());
         holder.classInstructor.setText(newList.getClassInstructor());
+        holder.classLocationAndRoomNumber.setText(newList.getClassLocationAndRoomNumber());
     }
 
     public void setClassList(ArrayList<ClassData> classList) {

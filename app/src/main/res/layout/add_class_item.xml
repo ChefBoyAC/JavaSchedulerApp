@@ -30,7 +30,7 @@
             android:layout_height="wrap_content" />
 
         <EditText
-            android:hint="Course Name"
+            android:hint="Course Name/Section"
             android:id="@+id/courseName"
             android:inputType="textLongMessage|textPersonName"
             android:textColor="@color/purple_500"
@@ -56,6 +56,17 @@
         <EditText
             android:hint="Name of Instructor"
             android:id="@+id/instructor"
+            android:inputType="textPersonName"
+            android:textColor="@color/purple_500"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_margin="15dp"
+            android:minHeight="48dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+        <EditText
+            android:hint="Location/Room Number"
+            android:id="@+id/locationAndRoomNumber"
             android:inputType="textPersonName"
             android:textColor="@color/purple_500"
             android:textSize="18sp"

@@ -88,6 +88,7 @@ public class MainActivity extends AppCompatActivity {
         EditText courseName = v.findViewById(R.id.courseName);
         EditText dateAndTimeOfClass = v.findViewById(R.id.dateAndTimeOfClass);
         EditText instructor = v.findViewById(R.id.instructor);
+        EditText locationAndRoomNumber = v.findViewById(R.id.locationAndRoomNumber);
 
         AlertDialog.Builder addDialog = new AlertDialog.Builder(this);
 
@@ -97,11 +98,17 @@ public class MainActivity extends AppCompatActivity {
             String courses = courseName.getText().toString();
             String dateAndTime = dateAndTimeOfClass.getText().toString();
             String instructors = instructor.getText().toString();
+            String locationsAndRooms = locationAndRoomNumber.getText().toString();
 
             classList.add(new ClassData(
                     "Course: " + courses,
                     "Date and Time of Class: " + dateAndTime,
-                    "Instructor: " + instructors
+                    "Instructor: " + instructors,
+                    "Location/RoomNumber: " + locationsAndRooms
+
+
+
+
             ));
 
             classAdapter.notifyDataSetChanged();

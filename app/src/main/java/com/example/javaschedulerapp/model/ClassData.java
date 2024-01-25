@@ -6,10 +6,13 @@ public class ClassData {
     private final String classSchedule;
     private final String classInstructor;
 
-    public ClassData(String className, String classSchedule, String classInstructor) {
+    private final String classLocationAndRoomNumber;
+
+    public ClassData(String className, String classSchedule, String classInstructor, String classLocationAndRoomNumber) {
         this.className = className;
         this.classSchedule = classSchedule;
         this.classInstructor = classInstructor;
+        this.classLocationAndRoomNumber = classLocationAndRoomNumber;
     }
 
     public String getClassName() {
@@ -24,5 +27,7 @@ public class ClassData {
         return classInstructor;
     }
 
-
+    public String getClassLocationAndRoomNumber() {
+        return classLocationAndRoomNumber;
+    }
 }
