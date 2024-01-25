@@ -13,12 +13,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-
 import com.example.javaschedulerapp.model.ClassData;
 import com.example.javaschedulerapp.view.ClassAdapter;
-import com.example.javaschedulerapp.view.TaskAdapter;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
@@ -29,6 +30,8 @@ public class MainActivity extends AppCompatActivity {
     private ClassAdapter classAdapter;
 
     private static final String TAG = "MainActivity";
+
+    private ClassSharedPreferences preferencesManager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,6 +62,14 @@ public class MainActivity extends AppCompatActivity {
         // Set RecyclerView Adapter
         recy.setLayoutManager(new LinearLayoutManager(this));
         recy.setAdapter(classAdapter);
+
+        preferencesManager = new ClassSharedPreferences(this);
+
+        String classListJson = preferencesManager.getClassList();
+        if (classListJson != null) {
+            classList = deserializeClassList(classListJson);
+            classAdapter.setClassList(classList);
+        }
 
         // Set Dialog
         addsBtn.setOnClickListener(new View.OnClickListener() {
@@ -94,6 +105,9 @@ public class MainActivity extends AppCompatActivity {
             ));
 
             classAdapter.notifyDataSetChanged();
+
+            preferencesManager.saveClassList(serializeClassList(classList));
+
             //Toast.makeText(MainActivity.this, "Adding User Information Success", Toast.LENGTH_SHORT).show();
             dialog.dismiss();
         });
@@ -105,5 +119,14 @@ public class MainActivity extends AppCompatActivity {
 
         addDialog.create();
         addDialog.show();
+    }
+
+    private String serializeClassList(ArrayList<ClassData> classList) {
+        return new Gson().toJson(classList);
+    }
+
+    private ArrayList<ClassData> deserializeClassList(String classListJson) {
+        Type listType = new TypeToken<ArrayList<ClassData>>() {}.getType();
+        return new Gson().fromJson(classListJson, listType);
     }
 }

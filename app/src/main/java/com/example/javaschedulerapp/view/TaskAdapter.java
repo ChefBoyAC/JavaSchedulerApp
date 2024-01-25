@@ -17,7 +17,7 @@ import java.util.ArrayList;
 public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder> {
 
     private final Context context;
-    private final ArrayList<TaskData> taskList;
+    private ArrayList<TaskData> taskList;
 
     public TaskAdapter(Context context, ArrayList<TaskData> taskList) {
         this.context = context;
@@ -49,6 +49,11 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
         TaskData newList = taskList.get(position);
         holder.TaskTitle.setText(newList.getTaskName());
         holder.TaskSchedule.setText(newList.getTaskSchedule());
+    }
+
+    public void setTaskList(ArrayList<TaskData> taskList) {
+        this.taskList = taskList;
+        notifyDataSetChanged(); // or other appropriate notification method
     }
 
     @Override

@@ -16,7 +16,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.javaschedulerapp.model.TaskData;
 import com.example.javaschedulerapp.view.TaskAdapter;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 public class SecondActivity extends AppCompatActivity {
@@ -27,6 +30,8 @@ public class SecondActivity extends AppCompatActivity {
     private TaskAdapter taskAdapter;
 
     private static final String TAG = "SecondScreen";
+
+    private TasksSharedPreferences preferencesManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +64,14 @@ public class SecondActivity extends AppCompatActivity {
         // Set RecyclerView Adapter
         recy.setLayoutManager(new LinearLayoutManager(this));
         recy.setAdapter(taskAdapter);
+
+        preferencesManager = new TasksSharedPreferences(this);
+
+        String taskListJson = preferencesManager.getTaskList();
+        if (taskListJson != null) {
+            taskList = deserializeTaskList(taskListJson);
+            taskAdapter.setTaskList(taskList);
+        }
 
         // Set Dialog
         addBtn.setOnClickListener(new View.OnClickListener() {
@@ -96,6 +109,9 @@ public class SecondActivity extends AppCompatActivity {
             Log.d(TAG, "addInfo: taskList size after adding: " + taskList.size());
 
             taskAdapter.notifyDataSetChanged();
+
+            preferencesManager.saveTaskList(serializeTaskList(taskList));
+
             dialog.dismiss();
         });
 
@@ -105,6 +121,19 @@ public class SecondActivity extends AppCompatActivity {
 
         addDialog.create();
         addDialog.show();
+    }
+
+    private String serializeTaskList(ArrayList<TaskData> taskList) {
+        // Convert taskList to JSON or any other suitable format
+        // Example: Using Gson library
+        return new Gson().toJson(taskList);
+    }
+
+    private ArrayList<TaskData> deserializeTaskList(String taskListJson) {
+        // Convert JSON or any other format to ArrayList<TaskData>
+        // Example: Using Gson library
+        Type listType = new TypeToken<ArrayList<TaskData>>() {}.getType();
+        return new Gson().fromJson(taskListJson, listType);
     }
 
 
