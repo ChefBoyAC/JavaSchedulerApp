@@ -21,6 +21,7 @@
         <TextView
             android:text="Add the Course Information"
             android:textStyle="bold"
+            android:id="@+id/textTitle"
             android:textSize="19sp"
             android:textColor="@color/white"
             android:background="@color/purple_500"
@@ -75,6 +76,25 @@
             android:minHeight="48dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
+        <!-- so we are just going to add buttons instead of doing the alert dialog because it makes it seem harder-->
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text = "Add"
+            android:id = "@+id/addBtn"
+            android:layout_marginBottom="11dp"
+            android:textColor="@color/white"
+            android:layout_gravity="end"
+            />
+
+        <Button
+            android:id="@+id/cancelBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:layout_marginTop="11dp"
+            android:text="Cancel"
+            android:textColor="@color/white" />
 
     </LinearLayout>
 

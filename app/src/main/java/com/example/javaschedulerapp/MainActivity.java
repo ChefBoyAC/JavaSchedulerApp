@@ -1,14 +1,14 @@
 package com.example.javaschedulerapp;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -36,6 +36,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
         Log.d(TAG, "onCreate: Starting.");
 
         Button btnNavToSecond = (Button) findViewById(R.id.toSecondScreen);
@@ -74,58 +76,72 @@ public class MainActivity extends AppCompatActivity {
         // Set Dialog
         addsBtn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                addInfo();
+            public void onClick(View v) {
+                addInformation(v);
             }
         });
     }
 
-    private void addInfo() {
-        LayoutInflater inflater = LayoutInflater.from(this);
-        View v = inflater.inflate(R.layout.add_class_item, null);
+    private void addInformation(View v){
+        Dialog dialog = new Dialog(MainActivity.this);
+        dialog.setContentView(R.layout.add_class_item);
 
-        // Set view
-        EditText courseName = v.findViewById(R.id.courseName);
-        EditText dateAndTimeOfClass = v.findViewById(R.id.dateAndTimeOfClass);
-        EditText instructor = v.findViewById(R.id.instructor);
-        EditText locationAndRoomNumber = v.findViewById(R.id.locationAndRoomNumber);
+        EditText courseName = dialog.findViewById(R.id.courseName);
+        EditText dateAndTimeOfClass = dialog.findViewById(R.id.dateAndTimeOfClass);
+        EditText instructor = dialog.findViewById(R.id.instructor);
+        EditText locationAndRoomNumber = dialog.findViewById(R.id.locationAndRoomNumber);
+        Button addBtn = dialog.findViewById(R.id.addBtn);
+        Button cancelBtn = dialog.findViewById(R.id.cancelBtn);
 
-        AlertDialog.Builder addDialog = new AlertDialog.Builder(this);
+        addBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+               String courses ="", datesAndTimes = "", instructors = "", locationsAndRoomNumbers = "";
+               if(ifEmpty(courseName)){
+                   courses = setString(courseName);
+               }
+                if(ifEmpty(dateAndTimeOfClass)){
+                    datesAndTimes = setString(dateAndTimeOfClass);
+                }
+                if(ifEmpty(instructor)){
+                    instructors = setString(instructor);
+                }
+                if(ifEmpty(locationAndRoomNumber)){
+                    locationsAndRoomNumbers = setString(locationAndRoomNumber);
+                }
 
-        // Figure out what all of this means after this code works
-        addDialog.setView(v);
-        addDialog.setPositiveButton("Ok", (dialog, which) -> {
-            String courses = courseName.getText().toString();
-            String dateAndTime = dateAndTimeOfClass.getText().toString();
-            String instructors = instructor.getText().toString();
-            String locationsAndRooms = locationAndRoomNumber.getText().toString();
+                classList.add(new ClassData("Courses: "+ courses,
+                        "Date and Time of Class: " + datesAndTimes,
+                        "Instructor: " + instructors,
+                        "Location/ Room Number: " + locationsAndRoomNumbers));
 
-            classList.add(new ClassData(
-                    "Course: " + courses,
-                    "Date and Time of Class: " + dateAndTime,
-                    "Instructor: " + instructors,
-                    "Location/Room Number: " + locationsAndRooms
+                preferencesManager.saveClassList(serializeClassList(classList));
+                classAdapter.notifyItemInserted(classList.size()-1);
+                recy.scrollToPosition(classList.size() - 1);
 
 
-
-
-            ));
-
-            classAdapter.notifyDataSetChanged();
-
-            preferencesManager.saveClassList(serializeClassList(classList));
-
-            //Toast.makeText(MainActivity.this, "Adding User Information Success", Toast.LENGTH_SHORT).show();
-            dialog.dismiss();
+                dialog.dismiss(); // Dismiss dialog after adding item
+            }
         });
 
-        addDialog.setNegativeButton("Cancel", (dialog, which) -> {
-            dialog.dismiss();
-            //Toast.makeText(MainActivity.this, "Cancel", Toast.LENGTH_SHORT).show();
+        dialog.show();
+        cancelBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                    dialog.dismiss();
+            }
         });
 
-        addDialog.create();
-        addDialog.show();
+    }
+    private String setString(EditText text){
+        return text.getText().toString();
+    }
+    private boolean ifEmpty(EditText text){
+        if(!text.getText().toString().equals("")){
+            return true;
+        }
+        Toast.makeText(MainActivity.this, "Please Enter Contact Name!", Toast.LENGTH_SHORT);
+        return false;
     }
 
     private String serializeClassList(ArrayList<ClassData> classList) {

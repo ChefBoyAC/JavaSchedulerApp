@@ -30,4 +30,16 @@ public class ClassData {
     public String getClassLocationAndRoomNumber() {
         return classLocationAndRoomNumber;
     }
+
+    public void setCourse(String newCourse) {
+    }
+
+    public void setDateTime(String newDateTime) {
+    }
+
+    public void setInstructor(String newInstructor) {
+    }
+
+    public void setLocation(String newLocation) {
+    }
 }
