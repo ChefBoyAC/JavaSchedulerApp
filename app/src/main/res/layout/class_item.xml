@@ -60,7 +60,7 @@
                 android:textStyle="bold" />
 
         </LinearLayout>
-            <ImageButton
+           <!-- <ImageButton
                 android:layout_gravity = "center"
                 android:layout_margin = "10dp"
                 android:src ="@drawable/ic_circle"
@@ -71,6 +71,7 @@
                 >
 
             </ImageButton>
+            -->
     </LinearLayout>
 
 </androidx.cardview.widget.CardView>
