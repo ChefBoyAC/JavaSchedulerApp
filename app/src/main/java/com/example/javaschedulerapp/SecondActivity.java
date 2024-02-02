@@ -21,10 +21,12 @@ import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class SecondActivity extends AppCompatActivity {
 
     private FloatingActionButton addBtn;
+    private FloatingActionButton sortBtn;
     private RecyclerView recy;
     private ArrayList<TaskData> taskList;
     private TaskAdapter taskAdapter;
@@ -56,6 +58,9 @@ public class SecondActivity extends AppCompatActivity {
 
         // Set find Id
         addBtn = findViewById(R.id.addingTaskBtn);
+
+        sortBtn = findViewById(R.id.sortBtn);
+
         recy = findViewById(R.id.tRecycler);
 
         // Set Adapter
@@ -78,6 +83,13 @@ public class SecondActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 addInfo();
+            }
+        });
+
+        sortBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sortTaskList();
             }
         });
     }
@@ -106,8 +118,12 @@ public class SecondActivity extends AppCompatActivity {
                     "Time of Task: " + time
             ));
 
+
+
             Log.d(TAG, "addInfo: taskList size after adding: " + taskList.size());
 
+            preferencesManager.saveTaskList(serializeTaskList(taskList));
+            taskAdapter.setTaskList(taskList);
             taskAdapter.notifyDataSetChanged();
 
             preferencesManager.saveTaskList(serializeTaskList(taskList));
@@ -121,6 +137,13 @@ public class SecondActivity extends AppCompatActivity {
 
         addDialog.create();
         addDialog.show();
+    }
+
+    private void sortTaskList() {
+        Collections.sort(taskList);
+        preferencesManager.saveTaskList(serializeTaskList(taskList));
+        taskAdapter.setTaskList(taskList);
+        taskAdapter.notifyDataSetChanged();
     }
 
     private String serializeTaskList(ArrayList<TaskData> taskList) {

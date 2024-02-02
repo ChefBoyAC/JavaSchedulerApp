@@ -34,6 +34,19 @@
         android:contentDescription="buttons needs to press"
         app:tint="@color/white" />
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/sortBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="90dp"
+        android:layout_marginBottom="14dp"
+        android:contentDescription="buttons needs to press"
+        android:contextClickable="true" />
+
     <Button
         android:id="@+id/toFirstScreen"
         android:layout_width="wrap_content"

@@ -56,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Set find Id
         addsBtn = findViewById(R.id.addingClassBtn);
+
         recy = findViewById(R.id.mRecycler);
 
         // Set Adapter

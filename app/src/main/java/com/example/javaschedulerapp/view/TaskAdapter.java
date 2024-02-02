@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -68,22 +69,33 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
 
     @Override
     public void onBindViewHolder(TaskViewHolder holder, int position) {
-        TaskData newList = taskList.get(position);
+        TaskData newList = taskList.get(holder.getAdapterPosition());
         holder.TaskTitle.setText(newList.getTaskName());
         holder.TaskSchedule.setText(newList.getTaskSchedule());
 
         holder.checkBox.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                taskList.remove(position);
+                TaskData taskData = taskList.get(holder.getAdapterPosition());
+                taskList.remove(holder.getAdapterPosition());
+                holder.TaskTitle.setText(taskData.getTaskName());
+                holder.TaskSchedule.setText(taskData.getTaskSchedule());
+                deleteTaskFromJson(taskData);
                 preferencesManager.saveTaskList(serializeTaskList(taskList));
-                notifyItemRemoved(position);
+                notifyItemRemoved(holder.getAdapterPosition());
                 notifyDataSetChanged();
-
-
             }
         });
     }
+
+    private void deleteTaskFromJson(TaskData taskData) {
+        ArrayList<TaskData> updatedList = new ArrayList<>(taskList);
+        updatedList.remove(taskData);
+        String updatedJson = serializeTaskList(updatedList);
+        preferencesManager.saveTaskList(updatedJson);
+        setTaskList(updatedList);
+    }
+
 
     public void setTaskList(ArrayList<TaskData> taskList) {
         this.taskList = taskList;
