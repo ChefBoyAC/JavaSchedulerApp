@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">Java Scheduler App</string>
+
+    <string-array name="items">
+        <item>Assignment</item>
+        <item>Exam</item>
+        <item>Task</item>
+    </string-array>
 </resources>

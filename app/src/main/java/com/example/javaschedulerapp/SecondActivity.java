@@ -5,16 +5,25 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.Spinner;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.javaschedulerapp.model.AssignmentData;
+import com.example.javaschedulerapp.model.ExamData;
+import com.example.javaschedulerapp.model.ItemData;
 import com.example.javaschedulerapp.model.TaskData;
-import com.example.javaschedulerapp.view.TaskAdapter;
+import com.example.javaschedulerapp.view.ItemAdapter;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -23,17 +32,20 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class SecondActivity extends AppCompatActivity {
+public class SecondActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     private FloatingActionButton addBtn;
     private FloatingActionButton sortBtn;
     private RecyclerView recy;
-    private ArrayList<TaskData> taskList;
-    private TaskAdapter taskAdapter;
+    private ArrayList<ItemData> itemList;
+    private ItemAdapter itemAdapter;
 
     private static final String TAG = "SecondScreen";
 
-    private TasksSharedPreferences preferencesManager;
+    private ItemsSharedPreferences preferencesManager;
+
+    private Spinner spinnerItems;
+    private LinearLayout additionalFieldsLayouts;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,88 +59,93 @@ public class SecondActivity extends AppCompatActivity {
         btnNavToFirst.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d(TAG, "onClick: clicked!");
-
+                Log.d(TAG, "OnClick: Clicked btnNavToSecond");
                 Intent intent = new Intent(SecondActivity.this, MainActivity.class);
                 startActivity(intent);
             }
         });
 
-        taskList = new ArrayList<>();
-
-        // Set find Id
         addBtn = findViewById(R.id.addingTaskBtn);
-
         sortBtn = findViewById(R.id.sortBtn);
-
         recy = findViewById(R.id.tRecycler);
 
+        //itemList = new ArrayList<>();
+
         // Set Adapter
-        taskAdapter = new TaskAdapter(this, taskList);
+        //itemAdapter = new ItemAdapter(this, itemList);
+
+
+        recy.invalidate();
+        recy.requestLayout();
+
+        preferencesManager = new ItemsSharedPreferences(this);
+        String itemListJson = preferencesManager.getItemList();
+        itemList = new ArrayList<>();
+        if (itemListJson != null) {
+            itemList = itemAdapter.deserializeItemList(itemListJson);
+        }
+        itemAdapter = new ItemAdapter(this, itemList);
 
         // Set RecyclerView Adapter
         recy.setLayoutManager(new LinearLayoutManager(this));
-        recy.setAdapter(taskAdapter);
+        recy.setAdapter(itemAdapter);
+        itemAdapter.notifyDataSetChanged();
 
-        preferencesManager = new TasksSharedPreferences(this);
 
-        String taskListJson = preferencesManager.getTaskList();
-        if (taskListJson != null) {
-            taskList = deserializeTaskList(taskListJson);
-            taskAdapter.setTaskList(taskList);
-        }
-
-        // Set Dialog
         addBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                addInfo();
+                showAddItemDialog();
             }
         });
 
-        sortBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                sortTaskList();
-            }
-        });
+//        sortBtn.setOnClickListener(new View.OnClickListener()
+////            @Override
+////            public void onClick(View view) {
+////                sortItemList();
+////            }
+//        );
     }
 
-    // Inside addInfo method in SecondActivity
-    private void addInfo() {
+    private void showAddItemDialog() {
         LayoutInflater inflater = LayoutInflater.from(this);
-        View v = inflater.inflate(R.layout.add_task_item, null);
+        View dialogView = inflater.inflate(R.layout.add_item, null);
 
-        // Set view
-        EditText taskName = v.findViewById(R.id.taskName);
-        EditText taskTime = v.findViewById(R.id.taskTime);
+        spinnerItems = dialogView.findViewById(R.id.spinner);
+        additionalFieldsLayouts = dialogView.findViewById(R.id.additionalFieldsLayout);
+
+        String[] items = getResources().getStringArray(R.array.items);
+        ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, items);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerItems.setAdapter(adapter);
+
+        spinnerItems.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String selectedItem = parent.getItemAtPosition(position).toString();
+                updateAdditionalFields(selectedItem);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // Handle the case where nothing is selected.
+            }
+        });
 
         AlertDialog.Builder addDialog = new AlertDialog.Builder(this);
+        addDialog.setView(dialogView);
 
-        // Figure out what all of this means after this code works
-        addDialog.setView(v);
         addDialog.setPositiveButton("Ok", (dialog, which) -> {
-            String task = taskName.getText().toString();
-            String time = taskTime.getText().toString();
-
-            Log.d(TAG, "addInfo: Adding Task - Task: " + task + ", Time: " + time);
-
-            taskList.add(new TaskData(
-                    "Task: " + task,
-                    "Time of Task: " + time
-            ));
-
-
-
-            Log.d(TAG, "addInfo: taskList size after adding: " + taskList.size());
-
-            preferencesManager.saveTaskList(serializeTaskList(taskList));
-            taskAdapter.setTaskList(taskList);
-            taskAdapter.notifyDataSetChanged();
-
-            preferencesManager.saveTaskList(serializeTaskList(taskList));
-
-            dialog.dismiss();
+            String selectedItem = spinnerItems.getSelectedItem().toString();
+            if ("Assignment".equals(selectedItem)) {
+                createAssignment(dialogView);
+            } else if ("Exam".equals(selectedItem)) {
+                createExam(dialogView);
+            } else if ("Task".equals(selectedItem)) {
+                createTask(dialogView);
+            } else {
+                Log.e(TAG, "showAddItemDialog: Unknown item type selected");
+            }
         });
 
         addDialog.setNegativeButton("Cancel", (dialog, which) -> {
@@ -139,25 +156,102 @@ public class SecondActivity extends AppCompatActivity {
         addDialog.show();
     }
 
-    private void sortTaskList() {
-        Collections.sort(taskList);
-        preferencesManager.saveTaskList(serializeTaskList(taskList));
-        taskAdapter.setTaskList(taskList);
-        taskAdapter.notifyDataSetChanged();
+    private AssignmentData createAssignmentItem(View v) {
+        EditText assignmentName = v.findViewById(R.id.assignmentName);
+        EditText assignmentClass = v.findViewById(R.id.assignmentClass);
+        EditText assignmentTime = v.findViewById(R.id.assignmentDue);
+
+        String name = "Assignment: " + assignmentName.getText().toString();
+        String className = "Class: " + assignmentClass.getText().toString();
+        String time = "Due Date:" + assignmentTime.getText().toString();
+
+        return new AssignmentData(name, className, time);
     }
 
-    private String serializeTaskList(ArrayList<TaskData> taskList) {
-        // Convert taskList to JSON or any other suitable format
-        // Example: Using Gson library
-        return new Gson().toJson(taskList);
+    private ExamData createExamItem(View v) {
+        EditText examName = v.findViewById(R.id.examName);
+        EditText examDate = v.findViewById(R.id.examDate);
+        EditText examClass = v.findViewById(R.id.examClass);
+        EditText examLocation = v.findViewById(R.id.examLocation);
+
+        String name = "Exam: " + examName.getText().toString();
+        String date = "Date: " + examDate.getText().toString();
+        String className = "Class: " + examClass.getText().toString();
+        String location = "Location: " + examLocation.getText().toString();
+
+        return new ExamData(name, date, className, location);
     }
 
-    private ArrayList<TaskData> deserializeTaskList(String taskListJson) {
-        // Convert JSON or any other format to ArrayList<TaskData>
-        // Example: Using Gson library
-        Type listType = new TypeToken<ArrayList<TaskData>>() {}.getType();
-        return new Gson().fromJson(taskListJson, listType);
+    private TaskData createTaskItem(View v) {
+        EditText taskName = v.findViewById(R.id.taskName);
+        EditText taskSchedule = v.findViewById(R.id.taskTime);
+
+        String name = "Task: " + taskName.getText().toString();
+        String schedule = "Time: " + taskSchedule.getText().toString();
+
+        return new TaskData(name, schedule);
     }
 
+    private void createAssignment(View dialogView) {
+        AssignmentData assignmentData = createAssignmentItem(dialogView);
+        Log.d(TAG, "Before adding assignment: " + itemList.size());
+        itemList.add(assignmentData);
+        preferencesManager.saveItemList(itemAdapter.serializeItemList(itemList));
+        itemAdapter.setItemList(itemList);
+        itemAdapter.notifyDataSetChanged();
+    }
 
+    private void createExam(View dialogView) {
+        ExamData examData = createExamItem(dialogView);
+        Log.d(TAG, "Before adding exam: " + itemList.size());
+        itemList.add(examData);
+        Log.d(TAG, "After adding exam: " + itemList.size());
+        preferencesManager.saveItemList(itemAdapter.serializeItemList(itemList));
+        itemAdapter.setItemList(itemList);
+        itemAdapter.notifyDataSetChanged();
+    }
+
+    private void createTask(View dialogView) {
+        TaskData taskData = createTaskItem(dialogView);
+        Log.d(TAG, "Before adding task: " + itemList.size());
+        itemList.add(taskData);
+        Log.d(TAG, "After adding task: " + itemList.size());
+        preferencesManager.saveItemList(itemAdapter.serializeItemList(itemList));
+        itemAdapter.setItemList(itemList);
+        itemAdapter.notifyDataSetChanged();
+    }
+
+    private void updateAdditionalFields(String selectedItem) {
+        additionalFieldsLayouts.removeAllViews();
+
+        if ("Assignment".equals(selectedItem)) {
+            View additionalFieldsView = getLayoutInflater().inflate(R.layout.add_assignment, additionalFieldsLayouts, false);
+            additionalFieldsLayouts.addView(additionalFieldsView);
+        } else if ("Exam".equals(selectedItem)) {
+            View additionalFieldsView = getLayoutInflater().inflate(R.layout.add_exam, additionalFieldsLayouts, false);
+            additionalFieldsLayouts.addView(additionalFieldsView);
+        } else if ("Task".equals(selectedItem)) {
+            View additionalFieldsView = getLayoutInflater().inflate(R.layout.add_task, additionalFieldsLayouts, false);
+            additionalFieldsLayouts.addView(additionalFieldsView);
+        }
+        additionalFieldsLayouts.setVisibility(View.VISIBLE);
+    }
+
+//    private void sortItemList() {
+//        Collections.sort(itemList);
+//        preferencesManager.saveItemList(itemAdapter.serializeItemList(itemList));
+//        itemAdapter.setItemList(itemList);
+//        itemAdapter.notifyDataSetChanged();
+//    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        // Handle spinner item selection if needed
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+        // Handle the case where nothing is selected.
+    }
 }
+
