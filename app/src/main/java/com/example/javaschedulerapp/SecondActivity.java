@@ -103,9 +103,10 @@ public class SecondActivity extends AppCompatActivity {
         EditText taskName = v.findViewById(R.id.taskName);
         EditText taskTime = v.findViewById(R.id.taskTime);
 
+
         AlertDialog.Builder addDialog = new AlertDialog.Builder(this);
 
-        // Figure out what all of this means after this code works
+
         addDialog.setView(v);
         addDialog.setPositiveButton("Ok", (dialog, which) -> {
             String task = taskName.getText().toString();

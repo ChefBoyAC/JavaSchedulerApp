@@ -1,15 +1,19 @@
 package com.example.javaschedulerapp.view;
 
+import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
+
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.javaschedulerapp.R;
@@ -42,12 +46,14 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
 
         CheckBox checkBox;
 
+        LinearLayout tabLayout;
+
         public TaskViewHolder(View v) {
             super(v);
             TaskTitle = v.findViewById(R.id.taskTitle);
             TaskSchedule = v.findViewById(R.id.taskSchedule);
             checkBox = v.findViewById(R.id.checkBox);
-
+            tabLayout = v.findViewById(R.id.tabLayout);
 
         }
     }
@@ -86,7 +92,73 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
                 notifyDataSetChanged();
             }
         });
+        holder.tabLayout.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        LayoutInflater inflater = LayoutInflater.from(context);
+                        View view = inflater.inflate(R.layout.add_task_item, null);
+
+                        EditText taskName = view.findViewById(R.id.taskName);
+                        EditText taskTime = view.findViewById(R.id.taskTime);
+
+
+                        String task = taskList.get(position).getTaskSchedule();
+
+
+                        String name = extractValue(task, "Task ");
+                        taskName.setText(name);
+
+
+                        String time = extractValue(task, "Date (e.g: 2023-01-01) ");
+                        taskTime.setText(time);
+
+
+
+
+
+                        Log.d(TAG, "addInfo: Adding Task - Task: " + task + ", Time: " + time);
+
+                        AlertDialog.Builder addDialog = new AlertDialog.Builder(context);
+
+
+                        addDialog.setView(view);
+                        addDialog.setPositiveButton("Update", ((dialog, which) -> {
+
+                            String names ="", times = "";
+                            if(ifEmpty(taskName)){
+                                names = setString(taskName);
+                            }
+                            if(ifEmpty(taskTime)){
+                               times = setString(taskTime);
+                            }
+
+
+
+                            taskList.set(position,
+                                    new TaskData(
+                                            "Task: " + names,
+                                            "Time of Task: " + times
+                                    ));
+                            notifyItemChanged(position);
+                            preferencesManager.saveTaskList(serializeTaskList(taskList));
+                            dialog.dismiss();
+
+
+                        }));
+
+
+                        addDialog.setNegativeButton("Cancel",((dialog, which) -> {
+
+                            dialog.dismiss();
+                        }));
+
+
+                        addDialog.show();
+                    }
+        });
     }
+
+
 
     private void deleteTaskFromJson(TaskData taskData) {
         ArrayList<TaskData> updatedList = new ArrayList<>(taskList);
@@ -117,5 +189,22 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
         // Example: Using Gson library
         Type listType = new TypeToken<ArrayList<TaskData>>() {}.getType();
         return new Gson().fromJson(taskListJson, listType);
+    }
+    private String extractValue(String className, String delimiter) {
+        int index = className.indexOf(delimiter);
+        if (index != -1) {
+            return className.substring(index + delimiter.length()).trim();
+        }
+        return " "; // Handle case when delimiter is not found
+    }
+    private boolean ifEmpty(EditText text){
+        if(!text.getText().toString().equals("")){
+            return true;
+        }
+        Toast.makeText(context, "Please Enter Course Name!", Toast.LENGTH_SHORT);
+        return false;
+    }
+    private String setString(EditText text){
+        return text.getText().toString();
     }
 }
