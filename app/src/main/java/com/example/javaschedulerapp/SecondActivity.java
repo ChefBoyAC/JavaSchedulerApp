@@ -69,23 +69,13 @@ public class SecondActivity extends AppCompatActivity implements AdapterView.OnI
         sortBtn = findViewById(R.id.sortBtn);
         recy = findViewById(R.id.tRecycler);
 
-        //itemList = new ArrayList<>();
-
-        // Set Adapter
-        //itemAdapter = new ItemAdapter(this, itemList);
-
-
-        recy.invalidate();
-        recy.requestLayout();
-
         preferencesManager = new ItemsSharedPreferences(this);
         String itemListJson = preferencesManager.getItemList();
         itemList = new ArrayList<>();
+        itemAdapter = new ItemAdapter(this, itemList);
         if (itemListJson != null) {
             itemList = itemAdapter.deserializeItemList(itemListJson);
         }
-        itemAdapter = new ItemAdapter(this, itemList);
-
         // Set RecyclerView Adapter
         recy.setLayoutManager(new LinearLayoutManager(this));
         recy.setAdapter(itemAdapter);
