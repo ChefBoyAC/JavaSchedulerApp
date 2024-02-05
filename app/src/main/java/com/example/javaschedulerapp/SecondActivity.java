@@ -27,6 +27,8 @@ public class SecondActivity extends AppCompatActivity {
 
     private FloatingActionButton addBtn;
     private FloatingActionButton sortBtn;
+
+    private FloatingActionButton sortBtn2;
     private RecyclerView recy;
     private ArrayList<TaskData> taskList;
     private TaskAdapter taskAdapter;
@@ -61,6 +63,8 @@ public class SecondActivity extends AppCompatActivity {
 
         sortBtn = findViewById(R.id.sortBtn);
 
+        sortBtn2 = findViewById(R.id.sortBtn2);
+
         recy = findViewById(R.id.tRecycler);
 
         // Set Adapter
@@ -92,6 +96,13 @@ public class SecondActivity extends AppCompatActivity {
                 sortTaskList();
             }
         });
+
+        sortBtn2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sortTaskList2();
+            }
+        });
     }
 
     // Inside addInfo method in SecondActivity
@@ -112,20 +123,20 @@ public class SecondActivity extends AppCompatActivity {
 
         addDialog.setView(v);
         addDialog.setPositiveButton("Ok", (dialog, which) -> {
-            String Type = taskType.getText().toString();
+            String task = taskType.getText().toString();
             String Name = taskName.getText().toString();
-            String Time = taskTime.getText().toString();
+            String time = taskTime.getText().toString();
             String Class = taskClass.getText().toString();
             String Location = taskLocation.getText().toString();
 
 
 
-            Log.d(TAG, "addInfo: Adding Task - Task: " + Name + ", Time: " + Time);
+            Log.d(TAG, "addInfo: Adding Task - Task: " + Name + ", Time: " + time);
 
             taskList.add(new TaskData(
-                    "Type: " + Type,
+                    "Type: " + task,
                     "Item: " + Name,
-                    "Date: " + Time,
+                    "Date: " + time,
                     "Class: " + Class,
                     "Location: " + Location
             ));
@@ -152,11 +163,19 @@ public class SecondActivity extends AppCompatActivity {
     }
 
     private void sortTaskList() {
-        Collections.sort(taskList);
+        Collections.sort(taskList, TaskData.Comparators.TIME);
         preferencesManager.saveTaskList(serializeTaskList(taskList));
         taskAdapter.setTaskList(taskList);
         taskAdapter.notifyDataSetChanged();
     }
+
+    private void sortTaskList2() {
+        Collections.sort(taskList, TaskData.Comparators.TYPE);
+        preferencesManager.saveTaskList(serializeTaskList(taskList));
+        taskAdapter.setTaskList(taskList);
+        taskAdapter.notifyDataSetChanged();
+    }
+
 
     private String serializeTaskList(ArrayList<TaskData> taskList) {
         // Convert taskList to JSON or any other suitable format
