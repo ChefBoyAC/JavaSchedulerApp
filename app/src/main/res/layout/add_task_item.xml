@@ -26,12 +26,23 @@
             android:layout_gravity="center"
             android:gravity="center"
             />
+
+        <EditText
+            android:id="@+id/taskType"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp"
+            android:hint="Type (e.g: Assignment, Exam, Task)"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="@color/purple_500" />
+
         <EditText
             android:id="@+id/taskName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="15dp"
-            android:hint="Task"
+            android:hint="Name (e.g. Homework 1)"
             android:textSize="18sp"
             android:textStyle="bold"
             android:textColor="@color/purple_500" />
@@ -46,6 +57,25 @@
             android:textStyle="bold"
             android:textColor="@color/purple_500" />
 
+        <EditText
+            android:id="@+id/taskClass"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp"
+            android:hint="Class (e.g: CS XXXX, N/A)"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="@color/purple_500" />
+
+        <EditText
+            android:id="@+id/taskLocation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp"
+            android:hint="Location (e.g: Culc, N/A)"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="@color/purple_500" />
 
 
     </LinearLayout>

@@ -25,6 +25,8 @@ import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 
+import kotlinx.coroutines.scheduling.Task;
+
 public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder> {
 
     private final Context context;
@@ -40,18 +42,22 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
     }
 
     public static class TaskViewHolder extends RecyclerView.ViewHolder {
+        TextView TaskType;
         TextView TaskTitle;
-
         TextView TaskSchedule;
-
+        TextView TaskClass;
+        TextView TaskLocation;
         CheckBox checkBox;
 
         LinearLayout tabLayout;
 
         public TaskViewHolder(View v) {
             super(v);
+            TaskType = v.findViewById(R.id.taskTyper);
             TaskTitle = v.findViewById(R.id.taskTitle);
             TaskSchedule = v.findViewById(R.id.taskSchedule);
+            TaskClass = v.findViewById(R.id.taskClasses);
+            TaskLocation = v.findViewById(R.id.taskPlace);
             checkBox = v.findViewById(R.id.checkBox);
             tabLayout = v.findViewById(R.id.tabLayout);
 
@@ -76,8 +82,11 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
     @Override
     public void onBindViewHolder(TaskViewHolder holder, int position) {
         TaskData newList = taskList.get(holder.getAdapterPosition());
+        holder.TaskType.setText(newList.getTaskType());
         holder.TaskTitle.setText(newList.getTaskName());
         holder.TaskSchedule.setText(newList.getTaskSchedule());
+        holder.TaskClass.setText(newList.getTaskClass());
+        holder.TaskLocation.setText(newList.getTaskLocation());
 
         holder.checkBox.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -98,8 +107,12 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
                         LayoutInflater inflater = LayoutInflater.from(context);
                         View view = inflater.inflate(R.layout.add_task_item, null);
 
+                        EditText taskType = view.findViewById(R.id.taskType);
                         EditText taskName = view.findViewById(R.id.taskName);
                         EditText taskTime = view.findViewById(R.id.taskTime);
+                        EditText taskClass = view.findViewById(R.id.taskClass);
+                        EditText taskLocation = view.findViewById(R.id.taskLocation);
+
 
 
                         String task = taskList.get(position).getTaskSchedule();
@@ -124,20 +137,32 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
                         addDialog.setView(view);
                         addDialog.setPositiveButton("Update", ((dialog, which) -> {
 
-                            String names ="", times = "";
+                            String types ="", names ="", times = "", classes="", locations="";
+                            if(ifEmpty(taskType)){
+                                types = setString(taskType);
+                            }
                             if(ifEmpty(taskName)){
                                 names = setString(taskName);
                             }
                             if(ifEmpty(taskTime)){
                                times = setString(taskTime);
                             }
+                            if(ifEmpty(taskClass)){
+                                classes = setString(taskClass);
+                            }
+                            if(ifEmpty(taskLocation)){
+                                locations = setString(taskLocation);
+                            }
 
 
 
                             taskList.set(position,
                                     new TaskData(
-                                            "Task: " + names,
-                                            "Time of Task: " + times
+                                            "Type: " + types,
+                                            "Item: " + names,
+                                            "Date: " + times,
+                                            "Classe: " + classes,
+                                            "Location: " + locations
                                     ));
                             notifyItemChanged(position);
                             preferencesManager.saveTaskList(serializeTaskList(taskList));

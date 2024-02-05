@@ -100,8 +100,11 @@ public class SecondActivity extends AppCompatActivity {
         View v = inflater.inflate(R.layout.add_task_item, null);
 
         // Set view
+        EditText taskType = v.findViewById(R.id.taskType);
         EditText taskName = v.findViewById(R.id.taskName);
         EditText taskTime = v.findViewById(R.id.taskTime);
+        EditText taskClass = v.findViewById(R.id.taskClass);
+        EditText taskLocation = v.findViewById(R.id.taskLocation);
 
 
         AlertDialog.Builder addDialog = new AlertDialog.Builder(this);
@@ -109,14 +112,22 @@ public class SecondActivity extends AppCompatActivity {
 
         addDialog.setView(v);
         addDialog.setPositiveButton("Ok", (dialog, which) -> {
-            String task = taskName.getText().toString();
-            String time = taskTime.getText().toString();
+            String Type = taskType.getText().toString();
+            String Name = taskName.getText().toString();
+            String Time = taskTime.getText().toString();
+            String Class = taskClass.getText().toString();
+            String Location = taskLocation.getText().toString();
 
-            Log.d(TAG, "addInfo: Adding Task - Task: " + task + ", Time: " + time);
+
+
+            Log.d(TAG, "addInfo: Adding Task - Task: " + Name + ", Time: " + Time);
 
             taskList.add(new TaskData(
-                    "Task: " + task,
-                    "Time of Task: " + time
+                    "Type: " + Type,
+                    "Item: " + Name,
+                    "Date: " + Time,
+                    "Class: " + Class,
+                    "Location: " + Location
             ));
 
 
