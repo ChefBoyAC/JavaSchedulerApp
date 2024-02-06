@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="AlertDialogCustomStyle" parent="ThemeOverlay.AppCompat.Dialog.Alert">
+        <item name="android:colorAccent">@color/gold</item>
+        <!-- Customize text color for positive button (Ok) -->
+        <item name="android:textColorPrimary">@color/gold</item>
+        <!-- Customize text color for negative button (Cancel) -->
+        <item name="android:textColorSecondary">@color/gold</item>
+        <!-- Customize other attributes of the dialog -->
+        <!-- For example: background color, text appearance, etc. -->
+    </style>
+</resources>
