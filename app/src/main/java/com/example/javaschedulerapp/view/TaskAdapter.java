@@ -96,6 +96,7 @@
                     preferencesManager.saveTaskList(serializeTaskList(taskList));
                     notifyItemRemoved(holder.getAdapterPosition());
                     notifyDataSetChanged();
+                    Toast.makeText(context, "Item finished", Toast.LENGTH_SHORT).show();
                 }
             });
             holder.tabLayout.setOnClickListener(new View.OnClickListener() {
@@ -183,7 +184,7 @@
                             preferencesManager.saveTaskList(serializeTaskList(taskList));
                             notifyItemRemoved(position);
                             dialog.dismiss();
-                            Toast.makeText(context, "Task deleted", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(context, "Item deleted", Toast.LENGTH_SHORT).show();
                         }
                     });
                     builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
