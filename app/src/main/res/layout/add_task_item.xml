@@ -13,7 +13,8 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Add the Task"
+            android:id="@+id/addTaskTitle"
+            android:text="Add the Item"
             android:textStyle="bold"
             android:textSize="19sp"
             android:textColor="@color/white"

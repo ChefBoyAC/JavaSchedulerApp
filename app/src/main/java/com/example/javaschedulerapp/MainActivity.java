@@ -4,16 +4,19 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.javaschedulerapp.model.ClassData;
+import com.example.javaschedulerapp.model.TaskData;
 import com.example.javaschedulerapp.view.ClassAdapter;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.gson.Gson;
@@ -84,54 +87,56 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void addInformation(View v){
-        Dialog dialog = new Dialog(MainActivity.this);
-        dialog.setContentView(R.layout.add_class_item);
+        LayoutInflater inflater = LayoutInflater.from(this);
+        View view = inflater.inflate(R.layout.add_class_item, null);
 
-        EditText courseName = dialog.findViewById(R.id.courseName);
-        EditText dateAndTimeOfClass = dialog.findViewById(R.id.dateAndTimeOfClass);
-        EditText instructor = dialog.findViewById(R.id.instructor);
-        EditText locationAndRoomNumber = dialog.findViewById(R.id.locationAndRoomNumber);
-        Button addBtn = dialog.findViewById(R.id.addBtn);
-        Button cancelBtn = dialog.findViewById(R.id.cancelBtn);
+        EditText courseName = view.findViewById(R.id.courseName);
+        EditText dateAndTimeOfClass = view.findViewById(R.id.dateAndTimeOfClass);
+        EditText instructor = view.findViewById(R.id.instructor);
+        EditText locationAndRoomNumber = view.findViewById(R.id.locationAndRoomNumber);
 
-        addBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-               String courses ="", datesAndTimes = "", instructors = "", locationsAndRoomNumbers = "";
-               if(ifEmpty(courseName)){
-                   courses = setString(courseName);
-               }
-                if(ifEmpty(dateAndTimeOfClass)){
-                    datesAndTimes = setString(dateAndTimeOfClass);
-                }
-                if(ifEmpty(instructor)){
-                    instructors = setString(instructor);
-                }
-                if(ifEmpty(locationAndRoomNumber)){
-                    locationsAndRoomNumbers = setString(locationAndRoomNumber);
-                }
+        AlertDialog.Builder addDialog = new AlertDialog.Builder(this);
 
-                classList.add(new ClassData("Courses: "+ courses,
-                        "Date and Time of Class: " + datesAndTimes,
-                        "Instructor: " + instructors,
-                        "Location/ Room Number: " + locationsAndRoomNumbers));
+        addDialog.setView(view);
+        addDialog.setPositiveButton("Ok", (dialog, which) -> {
+            String courses = "";
+            String datesAndTimes = "";
+            String instructors = "";
+            String locationsAndRoomNumbers = "";
 
-                preferencesManager.saveClassList(serializeClassList(classList));
-                classAdapter.notifyItemInserted(classList.size()-1);
-                recy.scrollToPosition(classList.size() - 1);
-
-
-                dialog.dismiss(); // Dismiss dialog after adding item
+            if (ifEmpty(courseName)) {
+                courses = setString(courseName);
             }
+            if (ifEmpty(dateAndTimeOfClass)) {
+                datesAndTimes = setString(dateAndTimeOfClass);
+            }
+            if (ifEmpty(instructor)) {
+                instructors = setString(instructor);
+            }
+            if (ifEmpty(locationAndRoomNumber)) {
+                locationsAndRoomNumbers = setString(locationAndRoomNumber);
+            }
+
+            classList.add(new ClassData(
+                    "Courses: " + courses,
+                    "Date and Time of Class: " + datesAndTimes,
+                    "Instructor: " + instructors,
+                    "Location/ Room Number: " + locationsAndRoomNumbers));
+
+            preferencesManager.saveClassList(serializeClassList(classList));
+            classAdapter.notifyItemInserted(classList.size() - 1);
+            recy.scrollToPosition(classList.size() - 1);
+
+            dialog.dismiss();
         });
 
-        dialog.show();
-        cancelBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                    dialog.dismiss();
-            }
+        addDialog.setNegativeButton("Cancel", (dialog, which) -> {
+            // Handle cancel button action if needed
+            dialog.dismiss();
         });
+
+        addDialog.create();
+        addDialog.show();
 
     }
     private String setString(EditText text){
