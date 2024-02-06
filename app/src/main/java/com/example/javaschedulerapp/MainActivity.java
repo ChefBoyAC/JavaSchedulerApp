@@ -1,17 +1,24 @@
 package com.example.javaschedulerapp;
 
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Paint;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -40,6 +47,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Window window = getWindow();
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.setStatusBarColor(ContextCompat.getColor(this, R.color.gold)); // Set your desired color here
+        }
 
         Log.d(TAG, "onCreate: Starting.");
 
@@ -95,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
         EditText instructor = view.findViewById(R.id.instructor);
         EditText locationAndRoomNumber = view.findViewById(R.id.locationAndRoomNumber);
 
-        AlertDialog.Builder addDialog = new AlertDialog.Builder(this);
+        AlertDialog.Builder addDialog = new AlertDialog.Builder(this, R.style.AlertDialogCustomStyle);
 
         addDialog.setView(view);
         addDialog.setPositiveButton("Ok", (dialog, which) -> {
@@ -129,6 +141,7 @@ public class MainActivity extends AppCompatActivity {
 
             dialog.dismiss();
         });
+
 
         addDialog.setNegativeButton("Cancel", (dialog, which) -> {
             // Handle cancel button action if needed

@@ -6,7 +6,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".SecondActivity">
+    tools:context=".SecondActivity"
+    android:background="@color/white"
+    >
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="450dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="190dp"
+        android:background="@drawable/download" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -16,8 +25,8 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Items"
-            android:textSize="30dp"
+            android:text="@string/tasks"
+            android:textSize="35dp"
             android:textStyle="bold"
             android:layout_marginStart="20dp"
             android:layout_marginTop="20dp"
@@ -43,6 +52,7 @@
         android:contextClickable="true"
         android:src="@drawable/ic_add"
         android:contentDescription="buttons needs to press"
+        android:backgroundTint="#FFD700"
         app:tint="@color/white" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -57,6 +67,7 @@
         android:layout_marginBottom="14dp"
         android:contentDescription="buttons needs to press"
         android:src="@drawable/baseline_calendar_today_24"
+        android:backgroundTint="#FFD700"
         app:tint="@color/white"
         android:contextClickable="true" />
 
@@ -73,15 +84,19 @@
         android:contentDescription="buttons needs to press"
         android:contextClickable="true"
         android:src ="@drawable/bulleted"
+        android:backgroundTint="#FFD700"
         app:tint="@color/white" />
 
     <Button
         android:id="@+id/toFirstScreen"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:layout_alignParentStart="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginEnd="323dp"
-        android:text="Back" />
+        android:text="Back"
+        android:backgroundTint="#FFD700"
+        android:textColor="@color/black"
+        android:layout_marginStart="15dp"
+        android:layout_marginBottom="15dp" />
 
 </RelativeLayout>
