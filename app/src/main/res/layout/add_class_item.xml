@@ -33,7 +33,7 @@
             android:layout_marginTop="5dp"/>
 
         <EditText
-            android:hint="Course Name/Section"
+            android:hint="Course Name/Section (e.g. CS 1XXX)"
             android:id="@+id/courseName"
             android:inputType="textLongMessage|textPersonName"
             android:textColor="#FFD700"
@@ -45,7 +45,7 @@
             android:layout_height="wrap_content" />
         <!-- inputType may have to be rearranged one may or may not have to be rearranged but I will ask for recommendation -->
         <EditText
-            android:hint="Date/Time of Class"
+            android:hint="Time of Class (e.g. M/W 2:00 - 3:00)"
             android:id="@+id/dateAndTimeOfClass"
             android:inputType="text|time|datetime|textMultiLine"
             android:textColor="#FFD700"
