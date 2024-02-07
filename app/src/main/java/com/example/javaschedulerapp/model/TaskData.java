@@ -35,14 +35,14 @@ public class TaskData {
                 Integer taskType1;
                 Integer taskType2;
                 System.out.println(thisTask.getTaskType() + " & " + otherTask.getTaskType());
-                if ("exam".equals(thisTask.getTaskType().substring(6))) {
+                if ("Exam".equals(thisTask.getTaskType().substring(6))) {
                     taskType1 = Integer.valueOf(1);
                 } else if ("HW".equals(thisTask.getTaskType().substring(6))) {
                     taskType1 = Integer.valueOf(2);
                 } else {
                     taskType1 = Integer.valueOf(3);
                 }
-                if ("exam".equals(otherTask.getTaskType().substring(6)            )) {
+                if ("Exam".equals(otherTask.getTaskType().substring(6)            )) {
                     taskType2 = Integer.valueOf(1);
                 } else if ("HW".equals(otherTask.getTaskType().substring(6))) {
                     taskType2 = Integer.valueOf(2);
